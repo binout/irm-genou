@@ -229,6 +229,7 @@ class MedicalImageViewer {
         const singleViewer = document.getElementById('single-viewer');
         const imageControls = document.getElementById('image-controls');
         const navigationSection = document.querySelector('.navigation');
+        const controlsSection = document.querySelector('.controls');
 
         switch (view) {
             case 'grid':
@@ -237,6 +238,7 @@ class MedicalImageViewer {
                 singleViewer.style.display = 'none';
                 imageControls.style.display = 'none';
                 navigationSection.style.display = 'none';
+                controlsSection.style.display = 'flex';
                 break;
             case 'single':
                 imageSection.style.display = 'none';
@@ -244,6 +246,7 @@ class MedicalImageViewer {
                 singleViewer.style.display = 'block';
                 imageControls.style.display = 'flex';
                 navigationSection.style.display = 'block';
+                controlsSection.style.display = 'none';
                 // sliceNav visibility will be set by setupSliceNavigation when an image is opened
                 break;
             case 'cine':
@@ -252,6 +255,7 @@ class MedicalImageViewer {
                 singleViewer.style.display = 'none';
                 imageControls.style.display = 'none';
                 navigationSection.style.display = 'none';
+                controlsSection.style.display = 'flex';
                 break;
         }
     }
