@@ -34,6 +34,9 @@ class MedicalImageViewer {
         this.zoom = 1;
         this.brightness = 100;
         this.contrast = 100;
+        this.currentPage = 1;
+        this.imagesPerPage = 50;
+        this.allImages = [];
 
         this.initializeEventListeners();
         this.loadManifest();
@@ -74,6 +77,21 @@ class MedicalImageViewer {
         
         document.getElementById('back-to-grid')?.addEventListener('click', () => {
             this.setView('grid');
+        });
+
+        document.getElementById('prev-page')?.addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.updateImageGrid();
+            }
+        });
+
+        document.getElementById('next-page')?.addEventListener('click', () => {
+            const totalPages = this.getTotalPages();
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.updateImageGrid();
+            }
         });
     }
 
@@ -149,23 +167,85 @@ class MedicalImageViewer {
     }
 
     async loadImages() {
-        const imageGrid = document.getElementById('image-grid');
-        imageGrid.innerHTML = '';
-
+        // Store all images for pagination
+        this.allImages = [];
+        
         for (const [sequenceType, sequenceData] of Object.entries(this.manifest.sequences)) {
             const metadata = this.sequenceMetadata[sequenceType] || {
                 name: sequenceType,
                 description: 'Séquence d\'imagerie médicale'
             };
 
-            // Sample images to avoid loading too many at once
-            const imagesToLoad = sequenceData.images.slice(0, Math.min(50, sequenceData.images.length));
-            
-            for (const image of imagesToLoad) {
-                const imageItem = this.createImageElement(image, sequenceType, metadata);
-                imageGrid.appendChild(imageItem);
+            for (const image of sequenceData.images) {
+                this.allImages.push({
+                    ...image,
+                    sequenceType,
+                    metadata
+                });
             }
         }
+
+        this.currentPage = 1;
+        this.updateImageGrid();
+    }
+
+    updateImageGrid() {
+        const imageGrid = document.getElementById('image-grid');
+        imageGrid.innerHTML = '';
+
+        // Filter images based on current sequence
+        const filteredImages = this.currentSequence === 'all' 
+            ? this.allImages 
+            : this.allImages.filter(img => img.sequenceType === this.currentSequence);
+
+        // Calculate pagination
+        const totalImages = filteredImages.length;
+        const totalPages = Math.ceil(totalImages / this.imagesPerPage);
+        const startIndex = (this.currentPage - 1) * this.imagesPerPage;
+        const endIndex = Math.min(startIndex + this.imagesPerPage, totalImages);
+        const imagesToShow = filteredImages.slice(startIndex, endIndex);
+
+        // Create image elements
+        for (const image of imagesToShow) {
+            const imageItem = this.createImageElement(image, image.sequenceType, image.metadata);
+            imageGrid.appendChild(imageItem);
+        }
+
+        // Update pagination UI
+        this.updatePaginationUI(totalImages, totalPages, startIndex + 1, endIndex);
+    }
+
+    updatePaginationUI(totalImages, totalPages, startIndex, endIndex) {
+        const paginationInfo = document.getElementById('pagination-info');
+        const paginationControls = document.getElementById('pagination-controls');
+        const imagesCount = document.getElementById('images-count');
+        const pageInfo = document.getElementById('page-info');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+
+        if (totalImages > 0) {
+            paginationInfo.style.display = 'block';
+            imagesCount.textContent = `Images ${startIndex}-${endIndex} sur ${totalImages}`;
+            
+            if (totalPages > 1) {
+                paginationControls.style.display = 'flex';
+                pageInfo.textContent = `Page ${this.currentPage} / ${totalPages}`;
+                prevButton.disabled = this.currentPage === 1;
+                nextButton.disabled = this.currentPage === totalPages;
+            } else {
+                paginationControls.style.display = 'none';
+            }
+        } else {
+            paginationInfo.style.display = 'none';
+            paginationControls.style.display = 'none';
+        }
+    }
+
+    getTotalPages() {
+        const filteredImages = this.currentSequence === 'all' 
+            ? this.allImages 
+            : this.allImages.filter(img => img.sequenceType === this.currentSequence);
+        return Math.ceil(filteredImages.length / this.imagesPerPage);
     }
 
     createImageElement(image, sequenceType, metadata) {
@@ -189,17 +269,9 @@ class MedicalImageViewer {
     }
 
     filterImages() {
-        const imageItems = document.querySelectorAll('.image-item');
         const videoItems = document.querySelectorAll('.video-item');
         
-        imageItems.forEach(item => {
-            if (this.currentSequence === 'all' || item.dataset.sequence === this.currentSequence) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
+        // Handle video filtering
         videoItems.forEach(item => {
             if (this.currentSequence === 'all' || item.dataset.sequence === this.currentSequence) {
                 item.style.display = 'block';
@@ -208,6 +280,9 @@ class MedicalImageViewer {
             }
         });
 
+        // Reset to first page when filtering
+        this.currentPage = 1;
+        this.updateImageGrid();
         this.updateSequenceInfo();
     }
 
