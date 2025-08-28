@@ -2,6 +2,16 @@
 
 Interface médicale professionnelle pour l'analyse d'images de résonance magnétique du genou.
 
+## 🚀 Accès Rapide
+
+<div align="center">
+  <img src="irm-genou-qr.png" alt="QR Code pour accès direct" width="200" height="200">
+  
+  **Scannez le QR code pour accéder à l'interface médicale**
+  
+  🔗 **URL directe**: [https://binout.github.io/irm-genou/](https://binout.github.io/irm-genou/)
+</div>
+
 ## 🔒 Accès Sécurisé
 
 Cette application contient des données médicales sensibles et nécessite un mot de passe pour l'accès.
