@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visionneuse IRM Genou - Analyse Médicale</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1>🏥 Visionneuse IRM Genou</h1>
+        <p>Interface médicale pour l'analyse des images de résonance magnétique</p>
+    </header>
+
+    <nav class="controls">
+        <div class="sequence-filter">
+            <label for="sequence-select">Séquence d'imagerie:</label>
+            <select id="sequence-select">
+                <option value="all">Toutes les séquences</option>
+                <option value="axial">Coupes Axiales (MPR_Ax)</option>
+                <option value="coronal">Coupes Coronales (MPR_Coro)</option>
+                <option value="sagittal">Coupes Sagittales (MPR_Sag)</option>
+                <option value="localizer">Localisateur (Loc_Droit)</option>
+                <option value="t1-cube">T1 CUBE</option>
+                <option value="dp-cube">DP FS CUBE</option>
+            </select>
+        </div>
+        
+        <div class="view-controls">
+            <button id="grid-view" class="active">Vue Grille</button>
+            <button id="cine-view">Mode Ciné</button>
+        </div>
+
+        <div class="image-controls" id="image-controls" style="display: none;">
+            <label for="brightness">Luminosité:</label>
+            <input type="range" id="brightness" min="0" max="200" value="100">
+            
+            <label for="contrast">Contraste:</label>
+            <input type="range" id="contrast" min="0" max="200" value="100">
+            
+            <button id="reset-adjustments">Réinitialiser</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <div class="sequence-info">
+                <h3>Informations sur la séquence</h3>
+                <div id="sequence-details">
+                    <p>Sélectionnez une image pour voir les détails</p>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <h3>Navigation</h3>
+                <div class="slice-navigation" style="display: none;" id="slice-nav">
+                    <label for="slice-slider">Coupe:</label>
+                    <input type="range" id="slice-slider" min="1" max="1" value="1">
+                    <span id="slice-info">1/1</span>
+                </div>
+            </div>
+
+            <div class="measurements" style="display: none;" id="measurements">
+                <h3>Mesures</h3>
+                <button id="measure-tool">Outil de mesure</button>
+                <div id="measure-results"></div>
+            </div>
+        </div>
+
+        <div class="viewer-container">
+            <div id="video-section" class="video-section">
+                <h2>Séquences Vidéo (Ciné)</h2>
+                <div id="video-grid" class="video-grid"></div>
+            </div>
+
+            <div id="image-section" class="image-section">
+                <h2>Images Statiques</h2>
+                <div id="image-grid" class="image-grid"></div>
+            </div>
+
+            <div id="single-viewer" class="single-viewer" style="display: none;">
+                <div class="back-button-container">
+                    <button id="back-to-grid" class="back-button">← Retour à la vue grille</button>
+                </div>
+                <div class="image-container">
+                    <canvas id="main-canvas"></canvas>
+                    <div class="zoom-controls">
+                        <button id="zoom-in">🔍+</button>
+                        <button id="zoom-out">🔍-</button>
+                        <button id="fit-screen">📏</button>
+                        <button id="actual-size">1:1</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Chargement des images médicales...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
