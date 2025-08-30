@@ -39,7 +39,26 @@ class MedicalImageViewer {
         this.allImages = [];
 
         this.initializeEventListeners();
+        this.initializeCollapsibleSections();
         this.loadManifest();
+    }
+
+    initializeCollapsibleSections() {
+        const toggle = document.getElementById('medical-report-toggle');
+        const content = document.getElementById('medical-report-content');
+        const icon = toggle.querySelector('.toggle-icon');
+        
+        toggle.addEventListener('click', () => {
+            const isExpanded = content.style.display !== 'none';
+            
+            if (isExpanded) {
+                content.style.display = 'none';
+                icon.classList.remove('expanded');
+            } else {
+                content.style.display = 'block';
+                icon.classList.add('expanded');
+            }
+        });
     }
 
     initializeEventListeners() {

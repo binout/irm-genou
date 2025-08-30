@@ -107,6 +107,87 @@ body {
     display: none;
 }
 
+.medical-report-top {
+    background: #333;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #4a90e2;
+    border-bottom: 1px solid #444;
+}
+
+.medical-report-top h3 {
+    color: #4a90e2;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #357abd;
+    padding-bottom: 0.5rem;
+}
+
+.collapsible-header {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.collapsible-header:hover {
+    color: #5ba3f5;
+}
+
+.toggle-icon {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.report-content {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.external-access {
+    background: #2a2a2a;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border: 1px solid #555;
+}
+
+.external-access a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.external-access a:hover {
+    text-decoration: underline;
+}
+
+.findings, .conclusion {
+    margin-bottom: 1rem;
+}
+
+.findings h4, .conclusion h4 {
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.conclusion ul {
+    margin-left: 1rem;
+    padding-left: 0;
+}
+
+.conclusion li {
+    margin-bottom: 0.5rem;
+    color: #b0b0b0;
+}
+
 #sequence-details {
     background: #333;
     padding: 1rem;
